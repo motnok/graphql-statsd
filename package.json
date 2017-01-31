@@ -30,14 +30,14 @@
     "eslint": "1.7.x",
     "eslint-plugin-babel": "2.x.x",
     "mocha": "2.x.x",
-    "nodemon": "1.7.x",
+    "nodemon": "1.7.x"
+  },
+  "dependencies": {
     "babel-runtime": "6.x.x",
     "clockit": "^1.0.1",
     "graphql": "0.7.2",
     "graphql-tools": "^0.8.4",
     "md5": "^2.2.1",
     "on-finished": "^2.3.0"
-  },
-  "dependencies": {
   }
 }
