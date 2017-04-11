@@ -94,7 +94,9 @@ export default class {
 
       // Send the resolve stat
       const statResolve = err => {
-        const tags = fieldInfo.statsdTags ? fieldInfo.statsdTags : [];
+        let tags = [];
+        if (fieldInfo.statsdTags)
+          tags = tags.concat(fieldInfo.statsdTags);
 
         if (err) {
           // In case Apollo Error is used, send the err.data.type
@@ -115,7 +117,7 @@ export default class {
           tags
         );
         if (err) {
-          this.statsdClient.increment('reolve_error', 1, this.sampleRate, tags);
+          this.statsdClient.increment('resolve_error', 1, this.sampleRate, tags);
         }
       };
 
