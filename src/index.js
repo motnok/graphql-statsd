@@ -134,7 +134,7 @@ export default class {
       }
 
       try {
-        if (typeof result.then === 'function') {
+        if (result && typeof result.then === 'function') {
           result.then(res => {
             statResolve();
             return res;
