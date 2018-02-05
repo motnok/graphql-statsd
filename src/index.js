@@ -215,8 +215,6 @@ export default class {
         format('operationName:%s', req.graphqlStatsdContext.operationName)
       ];
 
-      this.statsdClient.increment('requests', 1, this.sampleRate, tags);
-
       onFinished(res, () => {
         this.statsdClient.timing(
           'response_time',
