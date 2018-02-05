@@ -1,6 +1,6 @@
 {
   "name": "graphql-statsd",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Package for collecting metrics and sending them to a statsd service",
   "repository": {
     "type": "git",
