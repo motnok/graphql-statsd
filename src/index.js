@@ -57,7 +57,7 @@ export default class {
   /**
    * The sample rate to use for statsd reporting
    *
-   * @return int
+   * @return float
    */
   get sampleRate() {
     return this._sampleRate ? this._sampleRate : 1;
@@ -66,7 +66,7 @@ export default class {
   /**
    * Set the sample rate to use for statsd reporting
    *
-   * @param  int value
+   * @param  float value
    * @return void
    */
   set sampleRate(value) {
@@ -199,9 +199,14 @@ export default class {
   /**
    * Get express middleware to handle incomming requests
    *
+   * @param config object that can hold:
+   *   - tagQueryHash: if true metrics will be tagged with queryHash
+   *   - tagOperationName: if true metrics will be tagged with operationName
+   *   if config is not available, metrics will be tagged with queryHash and operationName
+   *   if config is available metrics will only be tagged with available options, missing options is equivalent to false
    * @return function
    */
-  getExpressMiddleware() {
+  getExpressMiddleware(config) {
     return (req, res, next) => {
       const timer = clockit.start();
 
@@ -209,13 +214,17 @@ export default class {
         queryHash: req.body.query ? md5(req.body.query) : null,
         operationName: req.body.operationName ? req.body.operationName : null
       };
+      var tags = [];
 
-      const tags = [
-        format('queryHash:%s', req.graphqlStatsdContext.queryHash),
-        format('operationName:%s', req.graphqlStatsdContext.operationName)
-      ];
+      if (!config || config.tagQueryHash) {
+        tags.push(format('queryHash:%s', req.graphqlStatsdContext.queryHash))
+      }
 
-      this.statsdClient.increment('requests', 1, this.sampleRate, tags);
+      if (!config || config.tagOperationName) {
+        tags.push(format('operationName:%s', req.graphqlStatsdContext.operationName))
+      }
+
+        this.statsdClient.increment('requests', 1, this.sampleRate, tags);
 
       onFinished(res, () => {
         this.statsdClient.timing(
